@@ -1,6 +1,29 @@
-{% extends "base.html" %} {% block content %}
-<form action="/login" method="POST">
-  <!-- <input type="text" name="artist" placeholder="好きなアーティストの名前" /> -->
-  <input type="submit" value="ログインして実行" />
-</form>
-{% endblock %}
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <title>Make Playlist With...</title>
+    <link rel="stylesheet" href="../static/style.css" />
+</head>
+<body>
+   <div class="back"></div>
+    <header>
+        <div>ヘッダーだよ</div>
+    </header>
+    <main>
+        <div class="container">
+                <div class="main">
+                    <h1>Let's Make Your Original PlayList!</h1>
+                    <p><span>Make Playlist With...</span>は、あなたのお気に入りのプレイリストをさらに以下の方法で分類分けできるアプリです！</p>
+                    <div class="explain how-to"><!-- 分類分け方法の説明をインラインブロック要素でいい感じの背景画像付きのボタンを作成して -->
+                        <a href="#" class="btn bpm"></a>
+                    </div>
+                    <p>まずは、以下をクリックしてログイン！</p>
+                    <form action="/login" method="POST" >
+                        <input type="submit" class="login" value="ログインして実行" />
+                    </form>
+                </div>
+        </div>
+  
+</body>
+</html>

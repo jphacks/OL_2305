@@ -1,0 +1,73 @@
+body {
+    /*background-color: rgb(196, 43, 43);*/
+    margin:0;
+    background-image: url("../templates/img/img1.1.jpg");
+    background-size: cover;
+    /*background-color: (0,0,0,255,0.5);
+    /*display: flex;
+    justify-content: center;
+    align-items: center;
+    
+    animation: img_anime 10s ease infinite;
+    background-color: (255,255,255,0.1);*/
+}
+body ::after{
+    opacity: 0.5;
+}
+/*@keyframes img_anime {
+    0% {
+    background-image: url(../img/img1.jpg);
+    background-color: (255,255,255,0.1); 
+    }
+    20% {
+    background-image: url(../img/img1.jpg);
+    background-color: (255,255,255,0.1);  
+    }
+    50%{
+    background-image: url(../img/img2.jpg); 
+    background-color: (255,255,255,0.1); 
+    }
+    75%{
+    background-image: url(../img/img2.jpg);
+    background-color: (255,255,255,0.1); 
+    }
+    100%{
+    background-image: url(../img/img1.jpg);
+    background-color: (255,255,255,0.1); 
+    }
+} */
+    
+header {
+    height: 65px;
+    width: 100%;
+    background-color: rgba(44, 184, 107, 0.9);
+    position:fixed;
+    top:0;
+    z-index:10;
+  }
+
+.container{
+    padding: 300px;
+    text-align: center;
+    color: white;
+    position: center;
+    margin:auto;
+}
+    
+
+.main{
+    margin:0,auto
+}
+.login{
+    width: 150px;
+    height: 50px;
+    border-radius: 10px;
+    background-color: white;
+    font-weight: bold;
+}
+
+
+.login:hover{
+    color:white;
+    background-color: black;
+}
