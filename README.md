@@ -10,6 +10,9 @@ $env:SPOTIPY_REDIRECT_URI='http://127.0.0.1:8080'
 venv/bin/python app.py
 ```
 
+または venv/bin/python app.py
+venv\Scripts\python.exe app.py
+
 #Mac/Linux 版
 
 ```
