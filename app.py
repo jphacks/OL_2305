@@ -83,15 +83,15 @@ def playlists():
 
     spotify = spotipy.Spotify(auth_manager=auth_manager)
     # 同期
-    make_playlist_douki(spotify)
-    return render_template('success.html')
+    # make_playlist_douki(spotify)
+    # return render_template('success.html')
 
     # 非同期
-    # spotify_auth_info = auth_manager.get_access_token()
+    spotify_auth_info = auth_manager.get_access_token()
         
-    # make_playlist.delay(spotify_auth_info)
+    make_playlist.delay(spotify_auth_info)
 
-    # return render_template('success.html')
+    return render_template('success.html')
 
 def make_playlist_douki(spotify):
   tracks = []
