@@ -24,15 +24,26 @@ Run app.py
 """
 
 import os
-from flask import Flask, session, request, redirect, render_template, url_for
+from flask import Flask, request, render_template, session, redirect
+from celery import Celery
 from flask_session import Session
 import spotipy
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = os.urandom(64)
+
+# Celery configuration
+app.config['CELERY_BROKER_URL'] = 'redis://localhost:6379/0'
+app.config['CELERY_RESULT_BACKEND'] = 'redis://localhost:6379/0'
+
+# session
 app.config['SESSION_TYPE'] = 'filesystem'
 app.config['SESSION_FILE_DIR'] = './.flask_session/'
 Session(app)
+
+# Initialize Celery
+celery = Celery(app.name, broker=app.config['CELERY_BROKER_URL'])
+celery.conf.update(app.config)
 
 
 @app.route('/')
@@ -72,15 +83,31 @@ def playlists():
         return redirect('/')
 
     spotify = spotipy.Spotify(auth_manager=auth_manager)
-
-    #####################
-    make_playlist(spotify)
     
+
+    #####################################
+    # spotify_auth_info = {
+    #     'access_token': auth_manager.get_access_token(),
+    #     # 他の認証情報を必要に応じて追加
+    # }
+    spotify_auth_info = auth_manager.get_access_token()
+        
+    make_playlist.delay(spotify_auth_info)
+    #######################################
+
     return render_template('success.html')
 
+@celery.task
+def make_playlist_copy(auth_info):
+   spotify = spotipy.Spotify(auth=auth_info['access_token'])
+   username = spotify.me()["id"]
+   print(username)
+   print("made")
+   return 0
 
-def make_playlist_copy(spotify):
-
+@celery.task
+def make_playlist(auth_info):
+  spotify = spotipy.Spotify(auth=auth_info['access_token'])
   tracks = []
   ids = []
 
@@ -206,11 +233,7 @@ def make_playlist_copy(spotify):
 
   return 0
 
-def make_playlist(spotify):
-   username = spotify.me()["id"]
-   print(username)
-   print("made")
-   return 0
+
 #####################
 
 
