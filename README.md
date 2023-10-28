@@ -4,4 +4,5 @@ $env:SPOTIPY_CLIENT_SECRET=client_secret
 $env:SPOTIPY_REDIRECT_URI='http://127.0.0.1:8080'
 $env:FLASK_ENV='development'
 $env:FLASK_APP='/path/to/spotipy/examples/app.py'
+flask --app app --debug run --host=0.0.0.0 --port=8080
 ```
