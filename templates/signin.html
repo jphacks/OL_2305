@@ -1,3 +1,24 @@
 {% extends "base.html" %} {% block content %}
-<h2><a href="{{auth_url}}">Sign in</a></h2>
+<header>
+  <div class="container head">
+    <div class="header-left">
+      <img src="../templates/img/icons8-m-100.png" alt="gazou" class="logo" />
+    </div>
+    <div class="header-right">
+      <h2><a href="{{auth_url}}" class="button">Sign in</a></h2>
+    </div>
+  </div>
+</header>
+<div class="container">
+  <div class="main">
+    <h1>作ろう、あなただけの特別なプレイリストを</h1>
+    <h2><a href="{{auth_url}}" class="button">Sign in</a></h2>
+  </div>
+</div>
+<footer>
+  <div class="container main">
+    <div>フッターだよお</div>
+    <!-- <p><"<a target="_blank" href="https://icons8.com/icon/111035/m" class="icon">M</a> icon by <a target="_blank" href="https://icons8.com" class="icon">Icons8</a>"></a></p> -->
+  </div>
+</footer>
 {% endblock %}
