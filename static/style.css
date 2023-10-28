@@ -1,116 +1,114 @@
 body {
-    margin:0;
-   /* background-image: url("../templates/img/img1.1.jpg");
+  margin: 0;
+  /* background-image: url("../templates/img/img1.1.jpg");
     /*display: flex;
     justify-content: center;
     align-items: center;*/
-    animation: img_anime 30s ease infinite;
-    background-size: cover;
+  animation: img_anime 30s ease infinite;
+  background-size: cover;
 }
-body ::after{
-    opacity: 0.5;
+body ::after {
+  opacity: 0.5;
 }
 @keyframes img_anime {
-    0% {
-    background-image: url(../templates/img/scroll/img1.1.jpg);
-    }
-    25% {
-    background-image: url(../templates/img/scroll/img2.1.jpg);
-    }
-    50%{
-    background-image: url(../templates/img/scroll/img3.1.jpg); 
-    }
-    75%{
-    background-image: url(../templates/img/scroll/img5.1.jpg); 
-    }
-    100%{
-    background-image: url(../templates/img/scroll/img1.1.jpg);
-    }
-} 
-    
+  0% {
+    background-image: url(img/scroll/img1.1.jpg);
+  }
+  25% {
+    background-image: url(img/scroll/img2.1.jpg);
+  }
+  50% {
+    background-image: url(img/scroll/img3.1.jpg);
+  }
+  75% {
+    background-image: url(img/scroll/img5.1.jpg);
+  }
+  100% {
+    background-image: url(img/scroll/img1.1.jpg);
+  }
+}
+
 header {
-    height: 155px;
-    width: 100%;
-    background-color: rgba(94, 214, 148, 0.9);
-    position:fixed;
-    top:0;
-    z-index:10;
-    display: inline-block;
-    /* padding: auto; */
-    /* text-align: center; */
+  height: 155px;
+  width: 100%;
+  background-color: rgba(94, 214, 148, 0.9);
+  position: fixed;
+  top: 0;
+  z-index: 10;
+  display: inline-block;
+  /* padding: auto; */
+  /* text-align: center; */
 }
-.head{
-    /* padding:100px; */
+.head {
+  /* padding:100px; */
 }
-.header-left{
-    float:left
+.header-left {
+  float: left;
 }
 
-.header-right{
-    float: right;
-    margin: 30px;
+.header-right {
+  float: right;
+  margin: 30px;
 }
-.logo{
-    margin: 30px;
+.logo {
+  margin: 30px;
 }
-.container{
-    width: 1170;
-    padding:0 15px;
-    color: white;
-    margin:0 auto;
+.container {
+  width: 1170;
+  padding: 0 15px;
+  color: white;
+  margin: 0 auto;
 }
-    
+
 .button {
-    /* display       : inline-block; */
-    border-radius : 5%;          /* 角丸       */
-    font-size     : 18pt;        /* 文字サイズ */
-    text-align    : center;      /* 文字位置   */
-    cursor        : pointer;     /* カーソル   */
-    padding       : 12px 12px;   /* 余白       */
-    background    : #000000;     /* 背景色     */
-    color         : #ffffff;     /* 文字色     */
-    line-height   : 1em;         /* 1行の高さ  */
-    transition    : .3s;         /* なめらか変化 */
-    box-shadow    : 6px 6px 3px #666666;  /* 影の設定 */
-    border        : 2px solid #000000;    /* 枠の指定 */
-  }
-  .button:hover {
-    box-shadow    : none;        /* カーソル時の影消去 */
-    color         : #000000;     /* 背景色     */
-    background    : #ffffff;     /* 文字色     */
-  }
-
-
-.main{
-    margin:0,auto;
-    text-align: center;
-    position: center;
-    padding: 300px;
+  /* display       : inline-block; */
+  border-radius: 5%; /* 角丸       */
+  font-size: 18pt; /* 文字サイズ */
+  text-align: center; /* 文字位置   */
+  cursor: pointer; /* カーソル   */
+  padding: 12px 12px; /* 余白       */
+  background: #000000; /* 背景色     */
+  color: #ffffff; /* 文字色     */
+  line-height: 1em; /* 1行の高さ  */
+  transition: 0.3s; /* なめらか変化 */
+  box-shadow: 6px 6px 3px #666666; /* 影の設定 */
+  border: 2px solid #000000; /* 枠の指定 */
 }
-.main h1{
-    font-size: 350%;
-    text-decoration: underline;
-    text-align: center;
-    padding: 20px;
-}
-.login{
-    width: 150px;
-    height: 50px;
-    border-radius: 10px;
-    background-color: white;
-    font-weight: bold;
+.button:hover {
+  box-shadow: none; /* カーソル時の影消去 */
+  color: #000000; /* 背景色     */
+  background: #ffffff; /* 文字色     */
 }
 
-
-.login:hover{
-    color:white;
-    background-color: black;
+.main {
+  margin: 0, auto;
+  text-align: center;
+  position: center;
+  padding: 300px;
+}
+.main h1 {
+  font-size: 350%;
+  text-decoration: underline;
+  text-align: center;
+  padding: 20px;
+}
+.login {
+  width: 150px;
+  height: 50px;
+  border-radius: 10px;
+  background-color: white;
+  font-weight: bold;
 }
 
-footer{
-    color: white;
+.login:hover {
+  color: white;
+  background-color: black;
 }
 
-.icon{
-    color: wheat;
+footer {
+  color: white;
+}
+
+.icon {
+  color: wheat;
 }

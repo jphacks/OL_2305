@@ -1,8 +1,12 @@
-{% extends "base.html" %} {% block content %}
+{% extends "base.html" %}{% block content %}
 <header>
   <div class="container head">
     <div class="header-left">
-      <img src="../templates/img/icons8-m-100.png" alt="gazou" class="logo" />
+      <img
+        src="{{ url_for('static',filename='img/icons8-m-100.png') }}"
+        alt="gazou"
+        class="logo"
+      />
     </div>
     <div class="header-right">
       <h2><a href="{{auth_url}}" class="button">Sign in</a></h2>
@@ -16,9 +20,9 @@
   </div>
 </div>
 <footer>
-  <div class="container main">
+  <dir class="container main">
     <div>フッターだよお</div>
     <!-- <p><"<a target="_blank" href="https://icons8.com/icon/111035/m" class="icon">M</a> icon by <a target="_blank" href="https://icons8.com" class="icon">Icons8</a>"></a></p> -->
-  </div>
+  </dir>
 </footer>
 {% endblock %}
