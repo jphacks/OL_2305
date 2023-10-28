@@ -3,4 +3,4 @@ Gunicorn
 spotipy
 python-dotenv
 celery
-lask_session
+flask_session
