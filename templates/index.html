@@ -3,28 +3,29 @@
 <head>
     <meta charset="UTF-8">
     <title>Make Playlist With...</title>
-    <link rel="stylesheet" href="../static/style.css" />
+    <link rel="stylesheet" href="../static/style.css">
+    <link rel="icon" href="../templates/img/favicon.ico">
 </head>
 <body>
-   <div class="back"></div>
     <header>
-        <div>ヘッダーだよ</div>
+        <div class="container head">
+            <div class="header-left">  <img src="../templates/img/icons8-m-100.png" alt="gazou" class="logo"></div>
+            <!-- <div class="header-right"><h2><a href="{{auth_url}}" class="button">Sign in</a></h2></div> -->
+        </div>
     </header>
-    <main>
         <div class="container">
                 <div class="main">
-                    <h1>Let's Make Your Original PlayList!</h1>
-                    <p><span>Make Playlist With...</span>は、あなたのお気に入りのプレイリストをさらに以下の方法で分類分けできるアプリです！</p>
-                    <div class="explain how-to"><!-- 分類分け方法の説明をインラインブロック要素でいい感じの背景画像付きのボタンを作成して -->
-                        <a href="#" class="btn bpm"></a>
-                    </div>
-                    <p>まずは、以下をクリックしてログイン！</p>
-                    <!--<form action="/playlists" method="POST" >
-                        <input type="submit" class="login" value="ログインして実行" />
-                    </form> -->
-                    <a href="playlists">hogehoge</a>
+                    <p>Make Playlist With...</p>
+                    <h1>作ろう、あなただけの特別なプレイリストを</h1>
+                    <h2><a href="{{auth_url}}" class="button">Sign in</a></h2>
                 </div>
         </div>
-  
+    <footer>
+        <dir class="container main">
+            <div>フッターだよお</div> 
+        <!-- <p><"<a target="_blank" href="https://icons8.com/icon/111035/m" class="icon">M</a> icon by <a target="_blank" href="https://icons8.com" class="icon">Icons8</a>"></a></p> -->
+        </dir>
+    </footer>
 </body>
+</html>
 </html>

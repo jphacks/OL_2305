@@ -1,62 +1,97 @@
 body {
-    /*background-color: rgb(196, 43, 43);*/
     margin:0;
-    background-image: url("../templates/img/img1.1.jpg");
-    background-size: cover;
-    /*background-color: (0,0,0,255,0.5);
+   /* background-image: url("../templates/img/img1.1.jpg");
     /*display: flex;
     justify-content: center;
-    align-items: center;
-    
-    animation: img_anime 10s ease infinite;
-    background-color: (255,255,255,0.1);*/
+    align-items: center;*/
+    animation: img_anime 30s ease infinite;
+    background-size: cover;
 }
 body ::after{
     opacity: 0.5;
 }
-/*@keyframes img_anime {
+@keyframes img_anime {
     0% {
-    background-image: url(../img/img1.jpg);
-    background-color: (255,255,255,0.1); 
+    background-image: url(../templates/img/scroll/img1.1.jpg);
     }
-    20% {
-    background-image: url(../img/img1.jpg);
-    background-color: (255,255,255,0.1);  
+    25% {
+    background-image: url(../templates/img/scroll/img2.1.jpg);
     }
     50%{
-    background-image: url(../img/img2.jpg); 
-    background-color: (255,255,255,0.1); 
+    background-image: url(../templates/img/scroll/img3.1.jpg); 
     }
     75%{
-    background-image: url(../img/img2.jpg);
-    background-color: (255,255,255,0.1); 
+    background-image: url(../templates/img/scroll/img5.1.jpg); 
     }
     100%{
-    background-image: url(../img/img1.jpg);
-    background-color: (255,255,255,0.1); 
+    background-image: url(../templates/img/scroll/img1.1.jpg);
     }
-} */
+} 
     
 header {
-    height: 65px;
+    height: 155px;
     width: 100%;
-    background-color: rgba(44, 184, 107, 0.9);
+    background-color: rgba(94, 214, 148, 0.9);
     position:fixed;
     top:0;
     z-index:10;
-  }
+    display: inline-block;
+    /* padding: auto; */
+    /* text-align: center; */
+}
+.head{
+    /* padding:100px; */
+}
+.header-left{
+    float:left
+}
 
+.header-right{
+    float: right;
+    margin: 30px;
+}
+.logo{
+    margin: 30px;
+}
 .container{
-    padding: 300px;
-    text-align: center;
+    width: 1170;
+    padding:0 15px;
     color: white;
-    position: center;
-    margin:auto;
+    margin:0 auto;
 }
     
+.button {
+    /* display       : inline-block; */
+    border-radius : 5%;          /* 角丸       */
+    font-size     : 18pt;        /* 文字サイズ */
+    text-align    : center;      /* 文字位置   */
+    cursor        : pointer;     /* カーソル   */
+    padding       : 12px 12px;   /* 余白       */
+    background    : #000000;     /* 背景色     */
+    color         : #ffffff;     /* 文字色     */
+    line-height   : 1em;         /* 1行の高さ  */
+    transition    : .3s;         /* なめらか変化 */
+    box-shadow    : 6px 6px 3px #666666;  /* 影の設定 */
+    border        : 2px solid #000000;    /* 枠の指定 */
+  }
+  .button:hover {
+    box-shadow    : none;        /* カーソル時の影消去 */
+    color         : #000000;     /* 背景色     */
+    background    : #ffffff;     /* 文字色     */
+  }
+
 
 .main{
-    margin:0,auto
+    margin:0,auto;
+    text-align: center;
+    position: center;
+    padding: 300px;
+}
+.main h1{
+    font-size: 350%;
+    text-decoration: underline;
+    text-align: center;
+    padding: 20px;
 }
 .login{
     width: 150px;
@@ -70,4 +105,12 @@ header {
 .login:hover{
     color:white;
     background-color: black;
+}
+
+footer{
+    color: white;
+}
+
+.icon{
+    color: wheat;
 }

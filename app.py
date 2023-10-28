@@ -52,7 +52,7 @@ def index():
         # Step 1. Display sign in link when no token
         auth_url = auth_manager.get_authorize_url()
         return render_template('signin.html', auth_url=auth_url)
-    f'<h2><a href="{auth_url}">Sign in</a></h2>'
+    #f'<h2><a href="{auth_url}">Sign in</a></h2>'
 
     # Step 3. Signed in, display data
     spotify = spotipy.Spotify(auth_manager=auth_manager)
