@@ -1,6 +1,7 @@
 #Windows 版
 
 ```
+py -3 -m venv venv
 venv\Scripts\activate
 pip install -r requirements.txt
 $env:SPOTIPY_CLIENT_ID=insert_your_client_id_here
@@ -15,6 +16,7 @@ venv/bin/python app.py
 #Mac/Linux 版
 
 ```
+py -3 -m venv venv
 venv\Scripts\activate
 pip install -r requirements.txt
 export SPOTIPY_CLIENT_ID=insert_your_client_id_here
