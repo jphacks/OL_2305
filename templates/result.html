@@ -1,0 +1,4 @@
+{% extends "base.html" %} {% block content %} {% for artist in artist_list %}
+<p>{{ artist[0] }}</p>
+<img src="{{ artist[1] }}" alt="" />
+{% endfor %} {% endblock %}
