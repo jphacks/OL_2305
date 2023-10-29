@@ -3,7 +3,10 @@
 [![IMAGE ALT TEXT HERE](https://jphacks.com/wp-content/uploads/2023/07/JPHACKS2023_ogp.png)](https://www.youtube.com/watch?v=yYRQEdfGjEg)
 
 ## 製品概要
+### 音楽 × Tech 
+### 曲のテンポやデータ分析によるクラスタリングを通して新たなプレイリストを作成する「Make Playlist With...」
 ### 背景(製品開発のきっかけ、課題等）
+#### 
 ### 製品説明（具体的な製品の説明）
 ### 特長
 #### 1. 特長1
@@ -19,12 +22,13 @@
 ## 開発技術
 ### 活用した技術
 #### API・データ
-* 
-* 
+* Spotify API
 
 #### フレームワーク・ライブラリ・モジュール
-* 
-* 
+* Flask
+* scikit-learn
+* umap
+* matplotlib
 
 #### デバイス
 * 
