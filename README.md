@@ -28,7 +28,6 @@
 * Flask
 * scikit-learn
 * umap
-* matplotlib
 
 #### デバイス
 * 
