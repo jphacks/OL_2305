@@ -24,7 +24,7 @@ Run app.py
 """
 
 import os
-from flask import Flask, request, render_template, session, redirect
+from flask import Flask, request, render_template, session, redirect, url_for
 from celery import Celery
 from flask_session import Session
 import spotipy
@@ -34,11 +34,11 @@ app.config['SECRET_KEY'] = os.urandom(64)
 
 # Celery configuration
 # Local
-# app.config['CELERY_BROKER_URL'] = 'redis://localhost:6379/0'
-# app.config['CELERY_RESULT_BACKEND'] = 'redis://localhost:6379/0'
+app.config['CELERY_BROKER_URL'] = 'redis://localhost:6379/0'
+app.config['CELERY_RESULT_BACKEND'] = 'redis://localhost:6379/0'
 # Render
-app.config['CELERY_BROKER_URL'] = 'redis://red-ckuj4bjamefc738qi0v0:6379/0'
-app.config['CELERY_RESULT_BACKEND'] = 'redis://red-ckuj4bjamefc738qi0v0:6379/0'
+# app.config['CELERY_BROKER_URL'] = 'redis://red-ckuj4bjamefc738qi0v0:6379/0'
+# app.config['CELERY_RESULT_BACKEND'] = 'redis://red-ckuj4bjamefc738qi0v0:6379/0'
 
 
 # session
@@ -71,7 +71,10 @@ def index():
 
     # Step 3. Signed in, display data
     spotify = spotipy.Spotify(auth_manager=auth_manager)
-    return render_template('index.html') # ユーザのプレイリストの一覧 BPM or クラスタ　実行ボタン > # Loading.html > # Succseess.html
+    # return render_template('index.html') # ユーザのプレイリストの一覧 BPM or クラスタ　実行ボタン > # Loading.html > # Succseess.html
+    playlists=[]
+    getPlaylistID(playlists,spotify)
+    return render_template('index.html',playlists=playlists) 
 
 @app.route('/sign_out')
 def sign_out():
@@ -79,8 +82,16 @@ def sign_out():
     return redirect('/')
 
 ####################
-@app.route('/loading')
+@app.route('/loading', methods=['POST'])
 def playlists():
+    # print(request.form['URL'])
+    # print(request.form['check'])
+    # print(request.form['howto'])
+    print(request.form['artist'])
+
+
+
+
     cache_handler = spotipy.cache_handler.FlaskSessionCacheHandler(session)
     auth_manager = spotipy.oauth2.SpotifyOAuth(cache_handler=cache_handler)
     if not auth_manager.validate_token(cache_handler.get_cached_token()):
@@ -362,7 +373,26 @@ def make_playlist(auth_info):
 
   return 0
 
+#CSSのキャッシュ対策
+@app.context_processor
+def override_url_for():
+    return dict(url_for=dated_url_for)
 
+def dated_url_for(endpoint, **values):
+    if endpoint == 'static':
+        filename = values.get('filename', None)
+        if filename:
+            file_path = os.path.join(app.root_path,
+                                 endpoint, filename)
+            values['q'] = int(os.stat(file_path).st_mtime)
+    return url_for(endpoint, **values)
+#名前、ジャケット、ID、が入っているリストを返す
+def getPlaylistID(playlists,spotify):
+    playlistID = []
+    for playlist in playlists:
+        result = spotify.playlist(playlist)
+        playlistID.append([result['name'], result['images'][0]['url'], result['id']])
+    return playlistID
 #####################
 
 
