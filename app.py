@@ -28,6 +28,13 @@ from flask import Flask, request, render_template, session, redirect, url_for
 from celery import Celery
 from flask_session import Session
 import spotipy
+import time
+import pandas as pd
+from sklearn import preprocessing
+from sklearn.cluster import KMeans
+import matplotlib.pyplot as plt
+# import umap
+import umap.umap_ as umap
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = os.urandom(64)
@@ -72,24 +79,31 @@ def index():
     # Step 3. Signed in, display data
     spotify = spotipy.Spotify(auth_manager=auth_manager)
     # return render_template('index.html') # ユーザのプレイリストの一覧 BPM or クラスタ　実行ボタン > # Loading.html > # Succseess.html
-    playlists=[]
-    getPlaylistID(playlists,spotify)
-    return render_template('index.html',playlists=playlists) 
+    playlistID =getUserPlaylistID(spotify)
+    print(playlistID)
+    return render_template('index.html',playlists=playlistID) 
 
 @app.route('/sign_out')
 def sign_out():
     session.pop("token_info", None)
     return redirect('/')
 
+###################
+class PlaylistTask:
+    def __init__(self, auth_info, howto, playlists):
+        self.auth_info = auth_info
+        self.howto = howto
+        self.playlists = playlists
 ####################
 @app.route('/loading', methods=['POST'])
 def playlists():
-    # print(request.form['URL'])
-    # print(request.form['check'])
-    # print(request.form['howto'])
-    print(request.form['artist'])
-
-
+    URL = request.form['URL']
+    list = request.form.getlist('check[]')
+    if URL != "":
+       playlists = [URL, * list]
+    else:
+       playlists = list
+    howto = request.form['howto']
 
 
     cache_handler = spotipy.cache_handler.FlaskSessionCacheHandler(session)
@@ -105,7 +119,9 @@ def playlists():
     # 非同期
     spotify_auth_info = auth_manager.get_access_token()
         
-    make_playlist.delay(spotify_auth_info)
+    make_playlist.delay(spotify_auth_info, howto, playlists)
+    # task = PlaylistTask(spotify_auth_info, howto, playlists)
+    # make_playlist.delay(task)
 
     return render_template('success.html')
 
@@ -118,7 +134,7 @@ def make_playlist_douki(spotify):
   
   # global original_play_list 
   
-  original_play_list = 'https://open.spotify.com/playlist/617F6ctM5ZbmaVeHs5IlWN?si=b1352e2d95194496'
+  # original_play_list = 'https://open.spotify.com/playlist/617F6ctM5ZbmaVeHs5IlWN?si=b1352e2d95194496'
 
   
   
@@ -156,58 +172,7 @@ def make_playlist_douki(spotify):
         url = list_data['items'][0]['external_urls']['spotify']
     return url
         
-
-  def addBPM_Playlist(min_tempo, max_tempo, dur):
-
-    removeSameID(ids)
-            
-    bpmDict = {}
-    start = min_tempo
-    end = max_tempo 
-    count = 0
-        
-    name = 'likedSongs_BPM0-' + str(start)
-    print('making : BPM0-' + str(start))
-    bpmDict[count] = [0, name]
-    
-    count += 1
-    create_play_list(name)
-    
-    for tempo in range(start, end, dur):
-      min_tempo = tempo 
-      max_tempo = tempo + 10
-      print('making : BPM'+str((min_tempo + 1)) + '-' + str(max_tempo))
-      name = 'likedSongs_BPM' + str((min_tempo + 1)) + '-' + str(max_tempo)
-      create_play_list(name)
-      bpmDict[count] = [min_tempo, name]
-      count += 1
-          
-    name = 'likedSongs_BPM' + str((end + 1)) + '-' 
-    create_play_list(name)
-    print('making : BPM' + str((end + 1)) + '-' )
-    
-    bpmDict[count] = [end, name]
-    
-    counter = 0
-      
-    for url in tracks:
-      tempo = getTempo(url, spotify)
-      
-      for i in range(1, len(bpmDict.keys())):
-          
-        if bpmDict[i-1][0] < tempo <= bpmDict[i][0]:
-          spotify.user_playlist_add_tracks(username, create_play_list(bpmDict[i-1][1]), [url])
-          # print('add: '+ getArtists(url, spotify) + ' - ' + getTrack(url, spotify) + ' in ' + bpmDict[i-1][1])
-          print(str(counter) + ' : ' + str(tempo) + ' in ' + bpmDict[i-1][1])
-          break
-        
-        if i == len(bpmDict.keys())-1:
-          spotify.user_playlist_add_tracks(username, create_play_list(bpmDict[i][1]), [url])
-          # print('add: '+ getArtists(url, spotify) + ' - ' + getTrack(url, spotify) + ' in ' + bpmDict[i][1])
-          print(str(counter) + ' : ' + str(tempo) + ' in ' + bpmDict[i-1][1])
-        
-      counter += 1
-                
+             
   def addTracks(results):
       
     ids.extend(results['items'])
@@ -229,9 +194,9 @@ def make_playlist_douki(spotify):
     
   # set_likedSong_tempo_track() # お気に入りの曲を含めるか
 
-  set_playlist_tempo_track(original_play_list) # プレイリストを含めるか
+  # set_playlist_tempo_track(original_play_list) # プレイリストを含めるか
 
-  addBPM_Playlist(start, end, dur) # プレイリストの作成
+  addBPM_Playlist(start, end, dur, playlists) # プレイリストの作成
 
   return 0
 
@@ -246,7 +211,7 @@ def make_playlist_copy(auth_info):
 
 
 @celery.task
-def make_playlist(auth_info):
+def make_playlist(auth_info, howto, playlists):
   spotify = spotipy.Spotify(auth=auth_info['access_token'])
   tracks = []
   ids = []
@@ -256,7 +221,7 @@ def make_playlist(auth_info):
   
   # global original_play_list 
   
-  original_play_list = 'https://open.spotify.com/playlist/617F6ctM5ZbmaVeHs5IlWN?si=b1352e2d95194496'
+  # original_play_list = 'https://open.spotify.com/playlist/617F6ctM5ZbmaVeHs5IlWN?si=b1352e2d95194496'
 
   
   
@@ -294,14 +259,30 @@ def make_playlist(auth_info):
         url = list_data['items'][0]['external_urls']['spotify']
     return url
         
+  
+  def addBPM_Playlist(start, end, dur, playlists):
+    def addTracks(results):
+      ids.extend(results['items'])
+      while results['next']:
+          results = spotify.next(results)
+          ids.extend(results['items'])
+    def removeSameID(ids):
+      for id in ids:
+          if not id['track']['id'] in tracks:
+              tracks.append(id['track']['id'])
+    def set_playlist_track(playlist):
+      results = spotify.playlist_tracks(playlist, limit=100)
+      print('loading: ' + spotify.playlist(playlist)['name'])
+      addTracks(results)
+    for playlist in playlists:
+        set_playlist_track(playlist)
 
-  def addBPM_Playlist(min_tempo, max_tempo, dur):
+    
+    removeSameID(ids)
 
     removeSameID(ids)
             
     bpmDict = {}
-    start = min_tempo
-    end = max_tempo 
     count = 0
         
     name = 'likedSongs_BPM0-' + str(start)
@@ -345,7 +326,95 @@ def make_playlist(auth_info):
           print(str(counter) + ' : ' + str(tempo) + ' in ' + bpmDict[i-1][1])
         
       counter += 1
-                
+  ##################
+  def addCLS_Playlist(playlists):
+    def set_playlist_track(playlist):
+      results = spotify.playlist_tracks(playlist, limit=100)
+      print('loading: ' + spotify.playlist(playlist)['name'])
+      addTracks(results)
+    def addTracks(results):
+      ids.extend(results['items'])
+      while results['next']:
+          results = spotify.next(results)
+          ids.extend(results['items'])
+
+    ##############
+    def getTrackFeatures(id):
+      meta = spotify.track(id)
+      features = spotify.audio_features(id)
+      name = meta['name']
+      album = meta['album']['name']
+      artist = meta['album']['artists'][0]['name']
+      release_date = meta['album']['release_date']
+      length = meta['duration_ms']
+      popularity = meta['popularity']
+      key = features[0]['key']
+      mode = features[0]['mode']
+      danceability = features[0]['danceability']
+      acousticness = features[0]['acousticness']
+      energy = features[0]['energy']
+      instrumentalness = features[0]['instrumentalness']
+      liveness = features[0]['liveness']
+      loudness = features[0]['loudness']
+      speechiness = features[0]['speechiness']
+      tempo = features[0]['tempo']
+      time_signature = features[0]['time_signature']
+      valence = features[0]['valence']
+      track = [name, album, artist, release_date, length, popularity, key, mode, danceability, acousticness, energy, instrumentalness, liveness, loudness, speechiness, tempo, time_signature, valence, id]
+      return track
+    #############
+    # set_likedSong_track()
+    for playlist in playlists:
+        set_playlist_track(playlist)
+    removeSameID(ids)
+    data = []
+    for url in tracks:
+        print(url)
+        time.sleep(0.5)
+        track = getTrackFeatures(url)
+        data.append(track)
+    df = pd.DataFrame(data, columns = ['name', 'album', 'artist', 'release_date', 'length', 'popularity', 'key', 'mode', 'danceability', 'acousticness', 'energy', 'instrumentalness', 'liveness', 'loudness', 'speechiness', 'tempo', 'time_signature', 'valence', 'id'])
+    df_features = df.drop(['name', 'album', 'artist', 'release_date', 'popularity', 'id', 'key', 'length', 'time_signature'], axis=1)
+    # pprint(df_features)
+    ss = preprocessing.StandardScaler()
+    a_standardscaler = ss.fit_transform(df_features)
+    a_ss = pd.DataFrame(a_standardscaler)
+    a_ss = a_ss.set_axis(['mode', 'danceability', 'acousticness', 'energy', 'instrumentalness', 'liveness', 'loudness',  'speechiness', 'tempo', 'valence'], axis=1)
+    # pprint(a_ss)
+    fig = plt.figure()
+    for i in range(2,11):
+        kmeanModel = KMeans(n_clusters=i, random_state=42)
+        kmeanModel.fit(a_standardscaler)
+        clusters = kmeanModel.labels_
+        # クラスターごとに何サンプルあるか
+        for j in range(i):
+            num = list(clusters).count(j)
+            print(f'Cluster {j}: n = {num}')
+        mapper = umap.UMAP(random_state=42)
+        embedding = mapper.fit_transform(a_ss)
+        plt.subplot(3, 3, i-1 )
+        plt.scatter(embedding[:, 0], embedding[:, 1],
+            c=clusters, cmap='Accent', alpha=0.7, s=5)
+        plt.title('UMAP plot_cluster : ' + str(i))
+    plt.show()
+    k = 5
+    kmeanModel = KMeans(n_clusters=k, random_state=42)
+    kmeanModel.fit(a_standardscaler)
+    clusters = kmeanModel.labels_
+    df['cluster'] = clusters
+    # pprint(df)
+    for row in df.itertuples():
+        for i in range(k):
+            filename = 'clustering' + str(i+1) + ' in ' + str(k)
+            create_play_list(filename)
+            if row.cluster == i:
+                spotify.user_playlist_add_tracks(username, create_play_list(filename), [row.id])
+                print('add: ' + row.name + ' - ' + row.artist + ' in ' + filename)
+                break
+
+  ##################
+
+
   def addTracks(results):
       
     ids.extend(results['items'])
@@ -367,9 +436,17 @@ def make_playlist(auth_info):
     
   # set_likedSong_tempo_track() # お気に入りの曲を含めるか
 
-  set_playlist_tempo_track(original_play_list) # プレイリストを含めるか
+  # set_playlist_tempo_track(original_play_list) # プレイリストを含めるか
 
-  addBPM_Playlist(start, end, dur) # プレイリストの作成
+  # addBPM_Playlist(start, end, dur, playlists) # プレイリストの作成
+
+  match howto:
+        case "BPM":
+          addBPM_Playlist(start, end, dur, playlists) # プレイリストの作成
+        case "CLS":
+          addCLS_Playlist(playlists) # プレイリストの作成
+        case _:
+            return "Something's wrong with the internet"
 
   return 0
 
@@ -387,11 +464,17 @@ def dated_url_for(endpoint, **values):
             values['q'] = int(os.stat(file_path).st_mtime)
     return url_for(endpoint, **values)
 #名前、ジャケット、ID、が入っているリストを返す
-def getPlaylistID(playlists,spotify):
+def getUserPlaylistID(spotify):
+    username = spotify.me()["id"]
+    playlists = []
     playlistID = []
+    result = spotify.user_playlists(username)
+    playlists.extend(result['items'])
+    while result['next']:
+        result = spotify.next(result)
+        playlists.extend(result['items'])
     for playlist in playlists:
-        result = spotify.playlist(playlist)
-        playlistID.append([result['name'], result['images'][0]['url'], result['id']])
+        playlistID.append([playlist['name'], playlist['id']])
     return playlistID
 #####################
 
